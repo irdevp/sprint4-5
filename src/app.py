@@ -1,16 +1,17 @@
-from flask import Flask, jsonify, request
+from flask import Flask
+from core.db import engine
+from core.config import Config
+from api.v1.endpoints.hotelEnpoints import hotelRouter
 
-app = Flask(__name__)
+def initialize_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    app.register_blueprint(hotelRouter, url_prefix="/api/v1/hotel")
 
-@app.route('/api', methods=['GET'])
-def hello_world():
-    return jsonify(message="API Grupo 5")
+    return app
 
-# Rota de inferência
-@app.route('/api/inference', methods=['POST'])
-def inference():
-    data = request.json
-    return jsonify(message="Inference", data=data)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+
+    app = initialize_app()
+    app.run(host="127.0.0.1", port=5000, debug=True)
