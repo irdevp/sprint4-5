@@ -1,0 +1,12 @@
+Flask[async]==3.0.3
+SQLModel==0.0.8
+PyMySQL==1.0.2
+python-dotenv==1.0.0
+pandas
+joblib
+scikit-learn
+numpy
+boto3
+sqlalchemy
+pymysql
+pydantic

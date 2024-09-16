@@ -1,85 +1,178 @@
-# Avaliação Sprints 4 e 5 - Programa de Bolsas Compass UOL e AWS - turma julho-a/2024
+[Python]: https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white
+[Flask]: https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white
+[Docker]:https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
+[AWS]: https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&amazon-aws&logoColor=white
 
-Avaliação das quarta e quinta sprints do programa de bolsas Compass UOL para formação em machine learning para AWS.
 
-***
 
-## Execução
+<h1 align="center">HotelPriceClassifier</h1>
 
-1 - Treinar o modelo utilizando SageMaker, a partir do dataset armazenado no AWS RDS, conforme instruções a seguir, e fazer o salvamento do modelo para o S3.
+![undraw_apartment_rent_o-0-ut](https://github.com/user-attachments/assets/61b022bf-d91a-4f7f-97ba-ccb0d6bf1431)
 
-2 - Criar um ambiente Docker no AWS para implementar a API descrita no próximo passo.
 
-3 - Desenvolver um serviço em python (API), utilizando algum framework http (Flask, FastApi...), que deve carregar o modelo treinado do S3 e expor um endpoint para realizar a inferência. O endpoint deve ser um POST com uma rota /api/v1/inference e receber um JSON no corpo da requisição seguindo o exemplo:
+<p align="center">O projeto HotelPriceClassifier visa desenvolver um modelo de machine learning para classificar reservas de hotéis com base no preço médio por quarto. Utilizando um dataset de reservas, o modelo irá categorizar cada reserva em três faixas de preço distintas, permitindo uma análise mais detalhada e previsões automatizadas sobre o custo das estadias. A solução será exposta através de uma API, permitindo que sistemas externos realizem consultas e obtenham previsões de forma rápida e eficiente, contribuindo para otimizar a gestão de preços e tomada de decisão no setor hoteleiro.</p>
 
-```json
-{
-    "no_of_adults": 3,
-    "no_of_children": 3,
-    "type_of_meal_plan": "example"
-    ...
-}
+<hr>
+
+![MIT License](https://img.shields.io/badge/License-MIT-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.9-yellow)
+![Flask](https://img.shields.io/badge/Flask-3.0.3-blue)
+![Docker](https://img.shields.io/badge/Docker-20.10.7-blue)
+![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
+
+
+
+## 📌 URL para Acesso
+
+- Coloque aqui o link para acessar a API na AWS
+
+
+## 🛠 Metodologia e Organização
+
+- **Scrum**: Metodologia ágil de gerenciamento de projetos que ajuda equipes a se auto-organizar e trabalhar em conjunto para atingir um objetivo comum.
+- **Trello**: Utilizado para organização de tarefas.
+
+
+## 🧑‍🤝‍🧑 Divisão de Tarefas
+
+- **Cicero Lucas Silva**:
+  - Conexão com o banco
+  - Modelo do Banco API
+- **Francisco Ivo Bezerra**:
+  - Sage Maker
+  - Banco RDS
+  - Treinamento do Modelo
+- **Igor Melo Gonçalo**:
+  - Estrutura Base da API
+  - Docker API
+  - End Points
+- **Jhonatan Sousa**:
+  - ScrumMaster
+  - Organização e Documentação
+  - READ.me
+
+## 📌 Funcionalidades
+
+- Classificação de reservas de hotéis em três faixas de preço diferentes com base no preço médio por quarto.
+- API RESTful desenvolvida com Flask para fazer previsões automatizadas.
+- Integração com AWS S3, EC2, RDS, e SageMaker para armazenamento de dados, gerenciamento de banco de dados e treinamento de modelos de machine learning.
+- Desenvolvimento e implementação de containers Docker para facilitar a implantação.
+
+## ⚙️ Tecnologias Utilizadas
+
+### Back-end
+
+- **Python e Flask**: Desenvolvimento da API para previsões.
+- **Docker**: Containerização da aplicação para fácil implantação.
+- **MySQL**: Banco de dados utilizado para armazenar informações das reservas de hotéis.
+
+### Serviços AWS
+- **S3**: Armazenar o modelo de machine learning treinado e outros arquivos necessários.
+- **EC2**: Hospedar a API publicamente, permitindo o acesso e consumo da mesma.
+- **RDS**: Armazenar os dados de reservas e permite o treinamento contínuo do modelo
+- **SageMaker**: Serviço para treinar e otimizar o modelo de machine learning.
+
+<hr>
+
+## 📁Estrutura de Pastas do Projeto
+
 ```
+    ├── assets/
+    ├── src/
+    │    ├── api/
+    │    │   └── v1/
+    │    │       └── endpoints/
+    │    ├── core/
+    │    │   
+    │    ├── models/
+    │    │   
+    │    └── scripts/
+                 
 
-A resposta deve seguir este formato:
-
-```json
-{
-  "result": 1
-}
 ```
+<hr>
 
-4 - Realizar o Deploy do serviço na AWS.
+## ❕ Justificativa da Escolha do Modelo
+O RandomForestClassifier foi escolhido por seu equilíbrio entre simplicidade e robustez, sua capacidade de evitar overfitting por meio do ensemble de árvores, e por ser um algoritmo que funciona bem em várias situações, mesmo sem grande pré-processamento dos dados. Ele fornece um bom desempenho com relativamente pouco ajuste fino, o que o torna uma excelente escolha para a classificação.
 
-![Esquema mostrando a cloud aws com usuários acessando api gateway esta recebendo o modelo do bucket s3. Sagemaker ligado ao bucket para fornecer o modelo e ao RDS para ler e atualizar o dataset.](assets/sprint4-5.jpg)
+- **Capacidade de lidar com dados complexos:** O Random Forest pode capturar relações complexas nos dados, pois é composto por várias árvores de decisão que, em conjunto, aumentam a capacidade preditiva.
 
-***
+- **Robustez ao overfitting:** Ao contrário de uma única árvore de decisão que pode facilmente superestimar o padrão dos dados (overfitting), o Random Forest constrói múltiplas árvores de decisão com subconjuntos aleatórios de dados e características. A votação entre essas árvores reduz o risco de overfitting, especialmente com dados ruidosos ou de grande dimensionalidade.
 
-## Construção do Modelo
+- **Facilidade de uso e bom desempenho geral:** O Random Forest funciona bem em diversas tarefas de classificação, mesmo com dados não normalizados, e lida bem com variáveis categóricas. Ele também tem poucos hiperparâmetros críticos, o que facilita sua aplicação sem ajustes complexos.
 
-O Hotel Reservations Dataset (<https://www.kaggle.com/datasets/ahsan81/hotel-reservations-classification-dataset>) é uma base de dados que trata de informações sobre reservas em hotéis.
+- **Redução de variância:** O Random Forest combina o output de muitas árvores de decisão independentes para produzir uma predição final. Isso ajuda a reduzir a variância do modelo, resultando em previsões mais estáveis e confiáveis.
 
-Iremos utilizar esse dataset para classificar os dados por faixa de preços de acordo com as informações encontradas em suas colunas (usem o que vocês acharem que faz sentido para análise).
 
-**Queremos saber como cada reserva (cada linha do dataset) se encaixa em qual faixa de preço.** Para isso, a equipe **deve criar uma nova coluna** chamada **label_avg_price_per_room**, que servirá como label para nossa classificação. Essa nova coluna deverá conter número 1 quando a coluna *avg_price_per_room* tiver valor menor ou igual a 85, número 2 quando a coluna *avg_price_per_room* tiver valor maior que 85 e menor que 115 e o valor 3 se a coluna *avg_price_per_room* tiver valor maior ou igual a 115.
+<hr>
 
-Vocês devem então **excluir a coluna avg_price_per_room** e criar um modelo que consiga classificar os dados com base na nova coluna *label_avg_price_per_room*.
+## 🚀 Começando
 
-Armazene o dataset original e alterado no AWS RDS. O modelo treinado deverá ser armazenado no S3.
+### Pré-requisitos
 
-Será necessário explicar o porquê da escolha do modelo, como ele funciona. Também será avaliada a taxa de assertividade do modelo.
+- Conta AWS configurada com permissões para S3, EC2, RDS, e SageMaker.
+- Docker instalado para a containerização da aplicação.
+- Python e bibliotecas necessárias listadas no `requirements.txt`.
 
-![Fluxograma para ilustração da descrição do tratamento do modelo.](assets/dataset_schema.png)
 
-***
 
-## O que será avaliado
+ **Documentação do Desenvolvimento Passo a Passo**:
 
-- Projeto em produção na AWS;
-- Código Python utilizado no Sagemaker;
-- Código Python usado na infererência (API);
-- Código do Dockerfile e/ou docker-compose;
-- Sobre o modelo:
-  - Divisão dos dados para treino e teste;
-  - Taxa de assertividade aceitável (se o modelo está classificando corretamente);
-  - Entendimento da equipe sobre o modelo utilizado (saber explicar o que foi feito);
-  - Mostrar resposta do modelo para classificação;
-- Organização geral do código fonte:
-  - Estrutura de pastas;
-  - Divisão de responsabilidades em arquivos/pastas distintos;
-  - Otimização do código fonte (evitar duplicações de código);
-- Objetividade do README.md.
+[Documentação do Projeto de Machine Learning e API.docx](https://github.com/user-attachments/files/17007003/Documentacao.do.Projeto.de.Machine.Learning.e.API.docx)
 
-***
 
-## Entrega
 
-- **O trabalho deve ser feito em grupos de três ou quatro pessoas**;
-  - **Evitar repetições de grupos de sprints anteriores**;
-- Criar uma branch no repositório com o formato grupo-número (Exemplo: grupo-1);
-- Subir o trabalho na branch com um README.md:
-  - documentar detalhes sobre como a avaliação foi desenvolvida;
-  - relatar dificuldades conhecidas;
-  - descrever como utilizar o sistema;
-- 🔨 Disponibilizar o código fonte desenvolvido (observar estruturas de pastas);
-- O prazo de entrega é até às 09h do dia 16/09/2024 no repositório do github (https://github.com/Compass-pb-aws-2024-JULHO-A/sprints-4-5-pb-aws-julho-a).
+<hr>
+
+## ❎ Dificuldades Encontradas
+
+- **Falta de Experiência Técnica**: Falta de domínio sobre as tecnologias e ferramentas necessárias para o projeto.
+
+- **Gestão de Tempo**: Dificuldade em cumprir prazos e gerenciar o tempo de forma eficiente.
+
+- **Comunicação Ineficiente**: Dificuldade em manter uma comunicação clara e eficaz entre os membros da equipe.
+
+
+## ✅ Lições Aprendidas
+
+- **Gestão de Tempo e Priorização**: Aprender a definir prioridades e gerenciar o tempo de forma mais eficaz.
+
+- **Flexibilidade e Adaptabilidade**: Aprender a ser mais flexível e se adaptar rapidamente a mudanças durante o projeto.
+
+- **Aprimoramento das Habilidades Técnicas**: A importância de investir tempo em capacitação e aprendizado contínuo.
+
+
+
+<hr>
+<table >
+  <tr>
+    <td align="center">
+      <a href="https://github.com/cicero-lucas">
+        <img src="https://avatars.githubusercontent.com/u/109551418?v=4" width="120" alt="Cicero Lucas" style="border-radius: 50%;">
+      </a>
+      <p><strong>Cicero Lucas</strong></p>
+      <a href="https://github.com/cicero-lucas">Perfil no GitHub</a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Ivo-Aragao">
+        <img src="https://avatars.githubusercontent.com/u/105293872?v=4" width="120" alt="Francisco Ivo" style="border-radius: 50%;">
+      </a>
+      <p><strong>Francisco Ivo</strong></p>
+      <a href="https://github.com/Ivo-Aragao">Perfil no GitHub</a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/irdevp">
+        <img src="https://avatars.githubusercontent.com/u/47428695?v=4" width="120" alt="Igor Melo" style="border-radius: 50%;">
+      </a>
+      <p><strong>Igor Melo</strong></p>
+      <a href="https://github.com/irdevp">Perfil no GitHub</a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/JohnOliverz">
+        <img src="https://avatars.githubusercontent.com/u/171964865?v=4" width="120" alt="Jhonatan Sousa" style="border-radius: 50%;">
+      </a>
+      <p><strong>Jhonatan Sousa</strong></p>
+      <a href="https://github.com/JohnOliverz">Perfil no GitHub</a>
+    </td>
+  </tr>
+</table>

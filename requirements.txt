@@ -1,5 +1,0 @@
-Flask==2.3.2
-SQLModel==0.0.8
-PyMySQL==1.0.2
-python-dotenv==1.0.0
-

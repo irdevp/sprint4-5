@@ -11,6 +11,7 @@ def initialize_app():
 
     # Registro de blueprints de rotas
     from api.v1.endpoints.hotelEnpoints import hotelRouter
-    app.register_blueprint(hotelRouter, url_prefix="/api/v1")
+    app.register_blueprint(hotelRouter, url_prefix="/api/v1/inference")
+
 
     return app
