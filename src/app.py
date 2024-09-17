@@ -19,10 +19,10 @@ def local_model():
 # Carregue o modelo uma vez na inicialização do servidor
 model = local_model()
 
-# Inicialize os codificadores de rótulos
-meal_plan_encoder = LabelEncoder().fit(["Meal Plan 1", "Not Selected"])
-room_type_encoder = LabelEncoder().fit(["Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4"])
-market_segment_encoder = LabelEncoder().fit(["Online", "Offline"])
+# Inicialize os codificadores de rótulos com todas as categorias esperadas
+meal_plan_encoder = LabelEncoder().fit(["Meal Plan 1", "Meal Plan 2", "Not Selected"])
+room_type_encoder = LabelEncoder().fit(["Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4", "Room_Type 5", "Room_Type 6"])
+market_segment_encoder = LabelEncoder().fit(["Online", "Offline", "Corporate"])
 booking_status_encoder = LabelEncoder().fit(["Not_Canceled", "Canceled"])
 
 @app.route('/api/v1/inference', methods=['POST'])
@@ -30,11 +30,26 @@ def infer():
     try:
         data = request.json
 
-        # Codificar as variáveis categóricas
-        type_of_meal_plan = meal_plan_encoder.transform([data['type_of_meal_plan']])[0]
-        room_type_reserved = room_type_encoder.transform([data['room_type_reserved']])[0]
-        market_segment_type = market_segment_encoder.transform([data['market_segment_type']])[0]
-        booking_status = booking_status_encoder.transform([data['booking_status']])[0]
+        # Codificar as variáveis categóricas com verificação de categorias desconhecidas
+        try:
+            type_of_meal_plan = meal_plan_encoder.transform([data['type_of_meal_plan']])[0]
+        except ValueError:
+            return jsonify({"error": f"Unknown meal plan: {data['type_of_meal_plan']}"}), 400
+        
+        try:
+            room_type_reserved = room_type_encoder.transform([data['room_type_reserved']])[0]
+        except ValueError:
+            return jsonify({"error": f"Unknown room type: {data['room_type_reserved']}"}), 400
+        
+        try:
+            market_segment_type = market_segment_encoder.transform([data['market_segment_type']])[0]
+        except ValueError:
+            return jsonify({"error": f"Unknown market segment: {data['market_segment_type']}"}), 400
+        
+        try:
+            booking_status = booking_status_encoder.transform([data['booking_status']])[0]
+        except ValueError:
+            return jsonify({"error": f"Unknown booking status: {data['booking_status']}"}), 400
 
         # Crie um DataFrame com os dados recebidos e os nomes das características
         feature_names = [
@@ -75,6 +90,7 @@ def infer():
         # Realize a inferência
         prediction = model.predict(features)[0]
         return jsonify({'result': int(prediction)}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
